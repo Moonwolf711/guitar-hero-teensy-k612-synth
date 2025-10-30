@@ -26,28 +26,31 @@ This project converts a Guitar Hero game controller into a professional-quality 
 ```
 ┌─────────────────────┐
 │  Guitar Hero        │
-│  Controller (USB)   │
+│  Xbox 360 Controller│
 └──────────┬──────────┘
            │ USB HID
 ┌──────────▼──────────┐         ┌─────────────────┐
 │                     │ UART    │                 │
-│   Teensy 4.x        ├────────►│  ESP8266        │
+│   Teensy 4.1        ├────────►│  ESP8266-12E    │
 │   (Audio + USB)     │         │  (WiFi)         │
-│                     │         │                 │
+│   600MHz ARM M7     │         │                 │
 └──────────┬──────────┘         └────────┬────────┘
            │ I2S                         │
 ┌──────────▼──────────┐         ┌───────▼─────────┐
 │  Audio Codec/DAC    │         │  Web Interface  │
 │  (SGTL5000/PCM5102) │         │  OSC Broadcast  │
 └─────────────────────┘         └─────────────────┘
+           ↓                             ↓
+     Line/Headphone                  WiFi Network
+        Output                       (Port 8000)
 ```
 
 ### Hardware Components
 
 **Required:**
-- Teensy 4.0 or 4.1 microcontroller ($25-30)
+- **Teensy 4.1 microcontroller** ($30) - SELECTED for SD card and expansion
 - ESP8266 ESP-12E module ($5)
-- Guitar Hero controller (PS3/Xbox 360 compatible, $10-30)
+- **Guitar Hero controller - Xbox 360 model** ($10-30) - CONFIRMED compatible
 - Audio codec: SGTL5000 or PCM5102 DAC ($15)
 - USB Host cable/adapter
 - 3.3V voltage regulator for ESP8266
@@ -320,7 +323,12 @@ Three integration options are supported:
 - Share synthesis engine and audio processing
 - **Requirements**: Access to K612 source code
 
-**Note**: Integration method depends on K612 capabilities. See K612 documentation for compatibility.
+**K612 Details**:
+- Pre-compiled firmware: `teensy_k612_standalone_synth_ino.hex`
+- Integration approach: Option 3 (Direct Code Integration) planned
+- Will merge Guitar Hero control with existing K612 synthesis engine
+
+**Note**: Integration requires decompiling or obtaining K612 source code.
 
 ## Troubleshooting
 

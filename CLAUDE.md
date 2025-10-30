@@ -7,10 +7,10 @@
 Transform a Guitar Hero controller into a standalone, expressive synthesizer using Teensy 4.x microcontroller with integrated ESP8266 WiFi control and OSC broadcasting capabilities. The system creates a complete musical instrument with scale quantization, pitch bend, and multiple synthesis voices.
 
 ### Core Technology Stack
-- **Teensy 4.x**: Main audio processor (ARM Cortex-M7, USB Host, Audio Library)
+- **Teensy 4.1**: Main audio processor (ARM Cortex-M7 @ 600MHz, 1MB RAM, SD card)
 - **ESP8266 (ESP-12E)**: WiFi control, web interface, OSC broadcasting
-- **Guitar Hero Controller**: HID input device via USB Host
-- **Integration Target**: K612 synthesizer (method TBD)
+- **Guitar Hero Controller**: Xbox 360 model (USB HID)
+- **Integration Target**: K612 synthesizer (teensy_k612_standalone_synth_ino.hex)
 
 ---
 
@@ -128,10 +128,9 @@ Transform a Guitar Hero controller into a standalone, expressive synthesizer usi
 #### Component Selection
 
 **Teensy 4.0 vs 4.1**:
-- Both supported
-- 4.1 advantages: SD card slot (for sample playback), more pins
-- 4.0 advantages: Lower cost, more compact
-- Recommendation: Start with 4.1 for flexibility
+- **SELECTED: Teensy 4.1**
+- Advantages: SD card slot (for sample playback), more pins, PSRAM option
+- Provides maximum flexibility for future expansion
 
 **Audio Output Options**:
 1. SGTL5000 codec (recommended): Line/headphone out, high quality
@@ -305,12 +304,17 @@ void loop() {
 - Physical enclosure design
 - PCB design (breadboard prototype first)
 
-### Critical Questions for User
-1. **K612 Synthesizer Details**: What is K612? Custom project or commercial product? What interface options does it have?
-2. **K612 Integration Method**: Which of the three options do you prefer? (MIDI, CV/Gate, direct code)
-3. **Hardware Preferences**: Teensy 4.0 or 4.1? Audio output type? Enclosure requirements?
-4. **Guitar Hero Controller Model**: Which controller do you have? (PS3, Xbox 360, Wii?)
-5. **Development Environment**: PlatformIO or Arduino IDE? What OS?
+### Hardware Configuration (CONFIRMED)
+1. **K612 Synthesizer**: Pre-compiled firmware (teensy_k612_standalone_synth_ino.hex)
+   - Integration method: Direct code merge (Option 3) - to be implemented
+2. **Teensy Model**: Teensy 4.1 (selected for SD card and extra features)
+3. **Guitar Hero Controller**: Xbox 360 model
+4. **Development Environment**: PlatformIO preferred
+
+### Remaining Questions
+1. **K612 Integration Method**: Preference for MIDI parallel vs direct code merge?
+2. **Audio Output**: SGTL5000 codec or PCM5102 DAC?
+3. **Enclosure Requirements**: Portable handheld or desktop unit?
 
 ---
 

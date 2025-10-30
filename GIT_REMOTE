@@ -1,20 +1,56 @@
 # Git Remote Configuration
 # This file tracks the Git remote URL and default branch for the project
 
+# Project: Guitar Hero → Teensy K612 Synthesizer
+# Hardware: Teensy 4.1 + ESP8266 + Xbox 360 Guitar Hero Controller
+
 # Remote URL - Configure with: git remote add origin <URL>
-# Recommended: Use GitHub CLI to create repository: gh repo create guitar-hero-teensy-k612-synth --public --source=. --remote=origin
 REMOTE_URL=<not_yet_configured>
 
-# Default branch (typically 'main' or 'master')
+# Default branch
 DEFAULT_BRANCH=main
 
-# Instructions to configure remote:
-# 1. Create GitHub repository:
-#    gh repo create guitar-hero-teensy-k612-synth --public --source=. --remote=origin --push
+# ========================================
+# SETUP INSTRUCTIONS
+# ========================================
+
+# Option 1: GitHub CLI (if installed)
+# -------------------------------------
+# Install GitHub CLI: https://cli.github.com/
+# Then run:
+#   cd /home/moon_wolf/guitar-hero-teensy-k612-synth
+#   gh repo create guitar-hero-teensy-k612-synth --public --source=. --remote=origin --push
+
+# Option 2: Manual Setup (GitHub CLI not installed)
+# --------------------------------------------------
+# 1. Go to GitHub.com and create a new repository named:
+#    guitar-hero-teensy-k612-synth
 #
-# 2. Or manually add remote:
-#    git remote add origin https://github.com/<username>/guitar-hero-teensy-k612-synth.git
+# 2. Copy the repository URL (HTTPS or SSH)
+#    HTTPS: https://github.com/YOUR_USERNAME/guitar-hero-teensy-k612-synth.git
+#    SSH:   git@github.com:YOUR_USERNAME/guitar-hero-teensy-k612-synth.git
+#
+# 3. In this directory, run:
+#    cd /home/moon_wolf/guitar-hero-teensy-k612-synth
+#    git remote add origin YOUR_REPO_URL
 #    git branch -M main
 #    git push -u origin main
 #
-# 3. Update this file with the actual remote URL after configuration
+# 4. Update this file with the actual remote URL
+
+# ========================================
+# CURRENT STATUS
+# ========================================
+# - Local repository initialized: YES
+# - Branch: main
+# - Commits: 2
+# - Remote configured: NO (awaiting user setup)
+# - Files ready to push: YES
+
+# ========================================
+# PROJECT DETAILS
+# ========================================
+# Description: Transform Guitar Hero controller into standalone synth
+# Hardware:    Teensy 4.1, ESP8266-12E, Xbox 360 controller
+# License:     MIT (or specify your preference)
+# Visibility:  Public (recommended for open source) or Private
