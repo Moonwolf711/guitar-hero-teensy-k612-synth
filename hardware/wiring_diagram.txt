@@ -1,0 +1,225 @@
+# Guitar Hero Teensy Synthesizer - Wiring Diagram
+# =====================================================
+
+## MAIN COMPONENTS LAYOUT
+
+    [Xbox 360 Guitar Hero Controller]
+                 |
+                USB
+                 |
+    [USB OTG Adapter/Cable]
+                 |
+         USB Host Port
+                 |
+    +------------------------+
+    |                        |
+    |     TEENSY 4.1        |
+    |                        |
+    |  [USB Host] [USB Dev]  |
+    |                        |
+    +------------------------+
+          |    |    |    |
+          |    |    |    +------> ESP8266 (Serial)
+          |    |    |
+          |    |    +-----------> Power (3.3V, GND)
+          |    |
+          |    +----------------> PCM5102A DAC (I2S)
+          |
+          +--------------------> Status LEDs
+
+
+## DETAILED PIN CONNECTIONS
+
+### Teensy 4.1 to PCM5102A I2S DAC
+```
+Teensy 4.1          PCM5102A Module
+----------          ----------------
+Pin 21 (BCLK1)  --> BCK  (Bit Clock)
+Pin 7  (OUT1A)  --> DIN  (Data In)
+Pin 20 (LRCLK1) --> LCK  (LR Clock)
+3.3V            --> VCC  (Power)
+GND             --> GND  (Ground)
+GND             --> FMT  (Format = I2S)
+3.3V            --> XMT  (Mute = High/Unmuted)
+GND             --> SCL  (No I2C)
+GND             --> FLT  (Normal Filter)
+GND             --> DMP  (No De-emphasis)
+
+                    Audio Output
+                    L OUT --> Left Speaker/Amp
+                    R OUT --> Right Speaker/Amp
+                    AGND  --> Audio Ground
+```
+
+### Teensy 4.1 to ESP8266-12E/NodeMCU
+```
+Teensy 4.1          ESP8266 NodeMCU
+----------          ---------------
+Pin 1 (TX1)     --> RX   (GPIO3)
+Pin 0 (RX1)     --> TX   (GPIO1)
+3.3V            --> VIN/3V3 (Power)
+GND             --> GND  (Ground)
+Pin 2           --> RST  (Reset - Optional)
+3.3V            --> EN   (Enable/CH_PD)
+```
+
+### USB Host Connection
+```
+Teensy 4.1 USB Host Port
+(5-pin header next to Ethernet jack)
+         _____
+        |     |
+    +5V | o o | D-
+    GND | o o | D+
+        | o   | ID (not used)
+        |_____|
+
+Connect to USB OTG adapter or cable
+Then to Xbox 360 Guitar Hero Controller
+```
+
+### Optional Status LEDs
+```
+Teensy 4.1          LED + Resistor
+----------          --------------
+Pin 13          --> Power LED (Built-in)
+Pin 4           --> 220Ω --> Activity LED --> GND
+Pin 5           --> 220Ω --> Error LED --> GND
+```
+
+## POWER SUPPLY CONFIGURATION
+
+### Option 1: USB Powered (Recommended for Testing)
+```
+USB Power (PC/Adapter)
+         |
+    Teensy 4.1 USB Device Port
+         |
+    Internal 3.3V Regulator
+         |
+    +----+----+
+    |         |
+  ESP8266  PCM5102A
+```
+
+### Option 2: External 5V Supply (Production)
+```
+5V DC Adapter (2A minimum)
+         |
+    Teensy 4.1 VIN Pin
+         |
+    Internal 3.3V Regulator
+         |
+    +----+----+
+    |         |
+  ESP8266  PCM5102A
+
+Note: Add 100µF capacitor between VIN and GND
+```
+
+## PCB LAYOUT RECOMMENDATIONS
+
+```
++----------------------------------------------------------+
+|                                                          |
+|  [USB HOST]    TEENSY 4.1            [SD CARD]         |
+|                                                          |
+|  +------------------------------------------------+      |
+|  |                                                |      |
+|  |           Component Side View                  |      |
+|  |                                                |      |
+|  +------------------------------------------------+      |
+|                                                          |
+|       PCM5102A                    ESP8266               |
+|    +------------+              +------------+           |
+|    |  I2S DAC   |              | WiFi Module|           |
+|    +------------+              +------------+           |
+|                                                          |
+|    [Audio Out Jack]            [Power Jack]             |
+|                                                          |
++----------------------------------------------------------+
+
+Dimensions: ~100mm x 70mm
+```
+
+## CABLE REQUIREMENTS
+
+1. USB Host Cable
+   - USB OTG adapter or USB Host cable
+   - Must support USB 2.0 Full Speed
+   - Length: < 2 meters recommended
+
+2. Audio Cables
+   - 3.5mm stereo jack from PCM5102A
+   - Shielded cable recommended
+   - Keep as short as possible
+
+3. Power Cable
+   - 5V DC, center positive
+   - 2.1mm barrel jack (standard)
+   - Minimum 2A current rating
+
+## TESTING POINTS
+
+Add test points for debugging:
+```
+TP1: 3.3V rail
+TP2: Ground
+TP3: Serial TX (Teensy to ESP)
+TP4: Serial RX (ESP to Teensy)
+TP5: I2S BCLK
+TP6: I2S LRCLK
+TP7: I2S Data
+TP8: Audio Out Left
+TP9: Audio Out Right
+```
+
+## COMPONENT LIST
+
+### Required Components:
+- 1x Teensy 4.1
+- 1x PCM5102A I2S DAC Module
+- 1x ESP8266 NodeMCU/Wemos D1 Mini
+- 1x USB OTG Adapter
+- 1x Xbox 360 Guitar Hero Controller
+- Jumper wires or PCB
+
+### Optional Components:
+- 3x LEDs (different colors)
+- 3x 220Ω resistors
+- 1x 100µF electrolytic capacitor
+- 1x 3.5mm stereo jack breakout
+- 1x Project enclosure
+- 1x 5V 2A power adapter
+
+### Tools Needed:
+- Soldering iron (if using PCB)
+- Wire strippers
+- Multimeter
+- Oscilloscope (optional, for debugging)
+- Logic analyzer (optional, for protocol debugging)
+
+## IMPORTANT NOTES
+
+1. **Voltage Levels**: ESP8266 is 3.3V ONLY! Do not connect 5V!
+2. **USB Host Power**: Teensy provides limited current on USB Host
+3. **Audio Ground**: Keep audio ground separate from digital ground if possible
+4. **Decoupling**: Add 0.1µF capacitors near power pins of ICs
+5. **Cable Length**: Keep I2S connections under 10cm for best results
+
+## TROUBLESHOOTING CONNECTIONS
+
+If no audio:
+1. Check I2S connections (BCLK, LRCLK, DATA)
+2. Verify PCM5102A jumper settings
+3. Test with oscilloscope on I2S pins
+
+If controller not detected:
+1. Check USB Host connections
+2. Try different USB cable
+3. Verify 5V on USB Host port
+
+If ESP8266 not responding:
+1. Check TX/RX are crossed correctly
+2. Verify 3.3V power (not 5V!)
+3. Check baud rate (115200)
